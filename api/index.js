@@ -45,7 +45,7 @@ app.post("/api/refresh", (req, res) => {
 
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
-    expiresIn: "15m",
+    expiresIn: "5s",
   });
 };
 const generateRefreshToken = (user) => {
@@ -98,6 +98,11 @@ app.delete("/api/users/:userId", verify, (req, res) => {
   }
 });
 
+app.post("/api/logout", verify, (req, res) => {
+  const refreshToken = req.body.token;
+  refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+  res.status(200).json("You logged out successfully!");
+});
 app.listen(5000, () => {
   console.log("Backend server running");
 });
